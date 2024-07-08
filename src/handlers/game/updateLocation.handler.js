@@ -8,7 +8,7 @@ const updateLocationHandler = ({ socket, userId, payload }) => {
   try {
     const { x, y } = payload;
     const gameId = gameSessionIds[0]
-    console.log(x, y)
+    console.log(userId, x, y)
     const gameSession = getGameSession(gameId);
 
     if (!gameSession) {

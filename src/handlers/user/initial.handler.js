@@ -3,7 +3,7 @@ import { HANDLER_IDS, RESPONSE_SUCCESS_CODE } from '../../constants/handlerIds.j
 import { createResponse } from '../../utils/response/createResponse.js';
 import { handleError } from '../../utils/error/errorHandler.js';
 import { createUser, findUserByDeviceID, updateUserLogin } from '../../db/user/user.db.js';
-import { getGameSession } from '../../session/game.session.js';
+import { addGameSession, getGameSession, removeGameSession } from '../../session/game.session.js';
 import { gameSessionIds } from '../../session/sessions.js';
 import Game from '../../classes/models/game.class.js';
 
@@ -23,11 +23,15 @@ const initialHandler = async ({ socket, userId, payload }) => {
 
     addUser(userId, socket);
 
+
     const gameId = gameSessionIds[0]
-    const a = getUserById(userId)
-    const session = new Game(gameId)
-    session.addUser(a)
-    console.log("추가후", session)
+
+    const gameSession = getGameSession(gameId);
+
+    const existUser = gameSession.getUser(user.id);
+    if (!existUser) {
+      gameSession.addUser(user);
+    }
 
 
     // 유저 정보 응답 생성
